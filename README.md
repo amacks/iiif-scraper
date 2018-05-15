@@ -4,13 +4,13 @@ Perl tool for downloading images from IIIF manifests
 ## Requirements
 * Perl > 5.10
 * Perl Modules
- * JSON
- * IO::Socket::SSL
- * Mozilla::CA
- * LWP::UserAgent
- * LWP::Simple
- * Data::Dumper
- * Getopt::Long
+  * JSON
+  * IO::Socket::SSL
+  * Mozilla::CA
+  * LWP::UserAgent
+  * LWP::Simple
+  * Data::Dumper
+  * Getopt::Long
 
 
 ## Basic
