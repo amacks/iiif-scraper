@@ -18,6 +18,8 @@ sub url_to_filename($$$);
 sub get_complete_image_url($);
 sub help();
 sub banner();
+sub make_filenames($$);
+sub get_iiif_elements($$$);
 
 
 ## variables will be set by CLI
@@ -204,4 +206,18 @@ sub make_filenames($$){
 sub banner(){
 	warn "  Please respect the rights of the holding institution where applicable.  ";
 	return;
+}
+
+## basic usage
+sub help(){
+    print <<EOF;
+$0 - a tool to download all of the web-images from an IIIF manifest. Required arguments:
+	--iiif=ManifestURL -- URL to the manifest, can be either HTTP or HTTPS
+	--target=Directory -- directory to save the images, will create if does not exist
+Optional Arguments:
+	--verbose -- display a bunch of debugging information to the console
+	--numbers -- Rename the images with sequence numbers
+	--labels -- Rename the images to the value of the `label` element of the manifest
+EOF
+    return;
 }
