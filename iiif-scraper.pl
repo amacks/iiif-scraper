@@ -10,6 +10,8 @@ use LWP::Simple;
 use Data::Dumper;
 use Getopt::Long;
 
+$|++;
+
 
 ### FUNCTION PROTOTYPES
 sub retrieve_data($$);
@@ -28,6 +30,7 @@ my $target_dir;
 my $DEBUG;
 my $numbers;
 my $labels;
+my $progress=1; ## display the progress bar by default while downloading
 ## parse the CLI arguments, set some values
 GetOptions('iiif=s' => \$url,
            'target=s'     => \$target_dir,
@@ -89,8 +92,16 @@ if (ref($image_urls) eq 'ARRAY'){
 	    if ($http_code != 200){
 		warn "request to " . get_complete_image_url($image_url) . " returned " . $http_code;
 	    }
+	    if (($progress) and ($i % 10 == 0)){
+		if ($i % 50 == 0){
+		    print $i;
+		} else {
+		    print ".";
+		}
+	    }
 	    $i++;
 	}
+	print "\n";
 }
 
 
