@@ -189,7 +189,12 @@ sub get_complete_image_url($){
 	if ($image_url =~ /stacks.stanford.edu/m){
 		$filename = "default.jpg";
 	}
-	return $image_url . '/full/full/0/'.$filename;
+	## NLW only gives you 1200 px to play with
+	if ($image_url !~ /damsssl.llgc.org.uk/m){
+		return $image_url . '/full/,1200/0/'.$filename;
+	} else {
+		return $image_url . '/full/full/0/'.$filename;		
+	}
 }
 
 ## convert an array of strings to filename safe strings
