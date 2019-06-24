@@ -31,12 +31,14 @@ my $DEBUG;
 my $numbers;
 my $labels;
 my $progress=1; ## display the progress bar by default while downloading
+my $max_size;
 ## parse the CLI arguments, set some values
 GetOptions('iiif=s' => \$url,
            'target=s'     => \$target_dir,
            'verbose!'   => \$DEBUG,
 	   'numbers!'    => \$numbers,
 	   'labels!'     => \$labels,
+	   'size=i'      => \$max_size
 );
 
 ## check for args
@@ -190,11 +192,14 @@ sub get_complete_image_url($){
 		$filename = "default.jpg";
 	}
 	## NLW only gives you 1200 px to play with
-	if ($image_url !~ /damsssl.llgc.org.uk/m){
-		return $image_url . '/full/,1200/0/'.$filename;
-	} else {
-		return $image_url . '/full/full/0/'.$filename;		
+	if (($image_url !~ /damsssl.llgc.org.uk/m) && (!defined($max_size))){
+		$max_size = 1200;
 	}
+	if (!defined $max_size){
+		$max_size = "full";
+	}
+	return $image_url . '/full/,'. $max_size .'/0/'.$filename;
+
 }
 
 ## convert an array of strings to filename safe strings
@@ -234,6 +239,7 @@ Optional Arguments:
 	--verbose -- display a bunch of debugging information to the console
 	--numbers -- Rename the images with sequence numbers
 	--labels -- Rename the images to the value of the `label` element of the manifest
+	--size -- requests a specific max-size for the height of the image.  Will not upscale if the raw image is smaller
 EOF
     return;
 }

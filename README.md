@@ -22,3 +22,4 @@ is the basic mode of operation.  It will create a directory named `TargetDir`, i
 * `--verbose` -- Emit a bunch of debugging information to console
 * `--numbers` -- Do not use the internal filename for images, simply number them in sequence
 * `--labels` -- Rename the files to the value in the `label` in the manifest.  The label is slightly modified to be a filename, spaces are replaced with _ and numbers are 0-padded, so `fol. 123 v.jpg` becomes `fol._00123_v.jpg`
+* `--size=<SIZE>` -- request the images with maximum height of SIZE. This is automatically set to 1200 if not set for the National Library of Wales to accomodate their restrictions
