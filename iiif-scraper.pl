@@ -188,7 +188,7 @@ sub get_complete_image_url($){
 	my ($image_url) = @_;
 	my $filename = "native.jpg";
 	## fixup for parker at Stanford, uses default as filename
-	if ($image_url =~ /stacks.stanford.edu/m){
+	if ($image_url =~ /stacks.stanford.edu/m || $image_url =~ /www.e-codices.ch/m){
 		$filename = "default.jpg";
 	}
 	## NLW only gives you 1200 px to play with
