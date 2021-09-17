@@ -17,7 +17,7 @@ $|++;
 sub retrieve_data($$);
 sub get_iiif_urls($$);
 sub url_to_filename($$$);
-sub get_complete_image_url($);
+sub get_complete_image_url($$);
 sub help();
 sub banner();
 sub make_filenames($$);
@@ -65,6 +65,11 @@ my $json_data = $json_tool->decode($json_string);
 
 #print Dumper($json_data);
 #exit ;
+## figure out version, look at the first canvas
+my $version =1;
+if ($json_data->{'sequences'}->[0]->{'canvases'}->[0]->{'images'}->[0]->{'resource'}->{'service'}->{'profile'} =~ /\/2\//){
+	$version=2;
+}
 ## pull the image urls out of the IIIF data
 my $image_urls = get_iiif_urls($json_data, undef);
 ## get the labels if we need them, then make them filename safe
@@ -83,16 +88,16 @@ if (ref($image_urls) eq 'ARRAY'){
 	    my $filename = url_to_filename($image_url, "jpg", $DEBUG);
 	    ## use weird filenames if desired
 	    if ($numbers){
-		$filename = sprintf("%05i.jpg", $i);
+			$filename = sprintf("%05i.jpg", $i);
 	    } elsif ($labels){
-		$filename = $image_labels->[$i] . ".jpg";
+			$filename = $image_labels->[$i] . ".jpg";
 	    }
 	    my $http_code = getstore(
-		get_complete_image_url($image_url),
-		$filename
+			get_complete_image_url($image_url, $version),
+			$filename
 		);
 	    if ($http_code != 200){
-		warn "request to " . get_complete_image_url($image_url) . " returned " . $http_code;
+			warn "request to " . get_complete_image_url($image_url, $version) . " returned " . $http_code;
 	    }
 	    if (($progress) and ($i % 10 == 0)){
 		if ($i % 50 == 0){
@@ -184,11 +189,11 @@ sub url_to_filename($$$){
 }
 
 ## append the junk to the urls to get the complete image file
-sub get_complete_image_url($){
-	my ($image_url) = @_;
-	my $filename = "native.jpg";
+sub get_complete_image_url($$){
+	my ($image_url, $version) = @_;
+	my $filename = "native.jpg"; ## Version 1
 	## fixup for parker at Stanford, uses default as filename
-	if ($image_url =~ /stacks.stanford.edu/m || $image_url =~ /www.e-codices.ch/m){
+	if ($version == 2){
 		$filename = "default.jpg";
 	}
 	## NLW only gives you 1200 px to play with
